@@ -5,8 +5,9 @@ const logger = require('morgan');
 const cors = require('cors');
 
 const mongodb = require('./db/mangoDb')
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const indexRouter = require('./src/routes/index');
+const usersRouter = require('./src/routes/users');
+const catwaysRouter = require('./src/routes/catways')
 
 mongodb.initClientDbConnection();
 
@@ -23,6 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/', catwaysRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 

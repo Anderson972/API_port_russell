@@ -42,4 +42,4 @@ const Reservation = new schema ({
     }
 });
 
-module.exports = mongoose('Reservation', Reservation);
+module.exports = mongoose.model('Reservation', Reservation);

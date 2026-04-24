@@ -41,4 +41,4 @@ User.pre('save', async function (next) {
   next();
 });
 
-module.exports = mongoose('User', User);
+module.exports = mongoose.model('User', User);

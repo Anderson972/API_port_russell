@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const schema = mongoose.schema;
+const schema = mongoose.Schema;
 
 const Catway = new schema ({
     catwayNumber    :{
@@ -13,7 +13,7 @@ const Catway = new schema ({
         type        : String,
         require     : [true, "Veuillez choisir entre 'short' et 'long'"],
         enum        : {
-            value   : ['short','long'],
+            values   : ['short','long'],
             message : '"{VALUE}" n\'est pas valide'
         },
         trim        : true
@@ -26,4 +26,4 @@ const Catway = new schema ({
     }
 });
 
-module.exports = mongoose('Catway', Catway);
+module.exports = mongoose.model('Catway', Catway);

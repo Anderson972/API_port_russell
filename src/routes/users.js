@@ -1,9 +1,16 @@
-var express = require('express');
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
+const service = require('../services/users');
+const private = require('../middlewares/private')
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.get('/users/', private.checkJWT, service.getAll);
+router.get('/users/:email', private.checkJWT, service.getByMail);
+router.post('/users/', service.add);
+router.put('/users/:email', private.checkJWT, service.updates);
+router.delete('/users/:email', private.checkJWT, service.delete);
+
+//Gestion de la connexion
+router.post('/login', service.authenticate);
+router.get('/logout', service.logout);
 
 module.exports = router;

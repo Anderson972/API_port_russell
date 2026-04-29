@@ -7,6 +7,8 @@ exports.checkJWT = (req, res, next) => {
 
    const token = req.session.token
 
+
+
     if (token) {
         jwt.verify(token, SECRET_KEY, (err, decoded)=> {
             if (err) {

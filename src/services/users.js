@@ -96,17 +96,13 @@ exports.delete = async (req, res, next) => {
 exports.authenticate = async (req, res, next) =>{
     const {email, password} = req.body;
 
-    console.log('=== authenticate ===')
-    console.log('email reçu :', email)
-    console.log('password reçu :', password)
 
     try{
 
-        const user = await User.findOne({email: email}, '+ password');
+        const user = await User.findOne({email: email}, '+password');
 
         if (user){
             bcrypt.compare(password, user.password, function(err, response){
-
 
                 if(err){
                     throw new Error(err);
@@ -135,7 +131,12 @@ exports.authenticate = async (req, res, next) =>{
                 });
             });
         } else{
-            return res.status(404).json({message :'user_not_found'});
+            return res.render('index', {
+                title       : 'Accueil - se connecter',
+                errors      : 'Utilisateur non trouvé',
+                mail        : email,
+                isInvalid   : true
+            });
         }
     }catch(error) {
         console.error('erreur authenticate', error)

@@ -1,0 +1,29 @@
+<%- include('header.ejs') -%>
+<div class="header d-flex justify-content-between p-3">
+    <div class="logo">
+        <h1>Port Russell</h1>
+    </div>
+    <a href="#" class="doc">Documentation API</a>
+</div>
+<div class="presentation mx-auto" style="width: 800px;">
+    <h2>Bienvenu sur l'API du port de plaisance de Russell</h2>
+    <p class="text-center">Cette application pertmet la gestion de reservation des catway.</p>
+</div>
+<form method="post" action="http://localhost:3000/login" class="card mx-auto" style="width: 500px;">
+    <fieldset>  
+        <legend class="m-3">Se connecter</legend>
+        <div class="form-floating m-3">
+            <input type="text" name="mail" id="mail" placeholder="name@mail.com" class=" <%= errors ? 'form-control is-invalid' : 'form-control' %> ">
+            <label for="mail">Mail</label>
+        </div>
+        <div class="form-floating m-3">
+            <input type="password" name="password" id="password" placeholder="Password" class=" <%= errors ? 'form-control is-invalid' : 'form-control' %> ">
+            <label for="password">Mot de passe</label>
+        </div>
+        <button type="submit" class="btn btn-primary m-3">Connexion</button>
+    </fieldset>
+</form>
+
+<%- include('footer.ejs') -%>
+
+

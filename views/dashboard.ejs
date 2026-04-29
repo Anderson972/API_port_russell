@@ -5,7 +5,13 @@
 <div class="card">
     <time datetime="YYYY-MM-DD HH:MM:SS"><%= date_now %></time>
 </div>
-
+<div class="welcom container-xl mx-auto d-flex justify-content-around">
+    <h1>Bienvenue, <%= username %> !</h1>
+    <span><%= mail %></span>
+</div>
+<div class="reservations">
+    
+</div>
 <%- include('footer.ejs') -%>
 
 

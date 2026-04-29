@@ -17,7 +17,7 @@ const User = new schema ({
     email        :{
         type        : String,
         trim        : true,
-        require     : [true, "L\'email est obligatoire"],
+        required     : [true, "L\'email est obligatoire"],
         unique      : true,
         lowercase   : true,
         match       : [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/,'Email invalide'],

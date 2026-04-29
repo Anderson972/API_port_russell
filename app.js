@@ -8,7 +8,8 @@ const session = require('express-session');
 const mongodb = require('./db/mangoDb')
 const indexRouter = require('./src/routes/index');
 const usersRouter = require('./src/routes/users');
-const catwaysRouter = require('./src/routes/catways')
+const catwaysRouter = require('./src/routes/catways');
+const reservationsRouter = require('./src/routes/reservations');
 
 mongodb.initClientDbConnection();
 
@@ -39,6 +40,7 @@ app.use(session({
 
 app.use('/', usersRouter);
 app.use('/', catwaysRouter);
+app.use('/', reservationsRouter);
 app.use('/', indexRouter);
 
 

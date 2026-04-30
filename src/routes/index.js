@@ -3,11 +3,14 @@ var router = express.Router();
 const private = require('../middlewares/private');
 const service = require('../services/users')
 
+const Reservation = require('../models/reservation');
+const Catway = require('../models/catway');
 
 // Routes
 const catwaysRouter = require('./catways');
 const usersRouter = require('./users');
 const reservationsRouter = require('./reservations');
+// const reservation = require('../models/reservation');
 
 
 
@@ -31,9 +34,12 @@ router.use('/catways', catwaysRouter);
 router.use('/',reservationsRouter);
 
 
-router.get('/dashboard', private.checkJWT, (req, res) => {
-    const now = new Date();
+router.get('/dashboard', private.checkJWT, async (req, res) => {
+  
+  const catway = await Catway.find()        
+  const reservation = await Reservation.find()
 
+  const now = new Date();
     const date_now = now.toLocaleString('fr-FR', {
         weekday   : 'long',
         day       : '2-digit',
@@ -49,7 +55,8 @@ router.get('/dashboard', private.checkJWT, (req, res) => {
         current : 'dashboard',
         username: req.decoded.user.username,
         mail    : req.decoded.user.email,
-        date_now: date_now
+        date_now: date_now,
+        reservations    : reservation
     })
 });
 

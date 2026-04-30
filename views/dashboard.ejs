@@ -5,12 +5,23 @@
 <div class="card">
     <time datetime="YYYY-MM-DD HH:MM:SS"><%= date_now %></time>
 </div>
-<div class="welcom container-xl mx-auto d-flex justify-content-around">
+<div class="welcom container-md mx-auto d-flex justify-content-around">
     <h1>Bienvenue, <%= username %> !</h1>
     <span><%= mail %></span>
 </div>
-<div class="reservations">
-    
+<div class="reservations container-md mx-auto">
+    <h2>Réservations en cours</h2>
+    <table>
+        <% reservations.forEach(reservation => { %>
+        <tr>
+            <td><%= reservation.boatName %></td>
+            <td><%= new Date(reservation.startDate).toLocaleDateString('fr-FR') %></td>
+        </tr>
+        <% }) %>
+    </table>
+    <form action="#" method="get">
+        <button class="btn btn-primary" type="submit">Voir les réservations</button>
+    </form>
 </div>
 <%- include('footer.ejs') -%>
 

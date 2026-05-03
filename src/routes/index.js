@@ -10,6 +10,7 @@ const Catway = require('../models/catway');
 const catwaysRouter = require('./catways');
 const usersRouter = require('./users');
 const reservationsRouter = require('./reservations');
+const reservation = require('../models/reservation');
 // const reservation = require('../models/reservation');
 
 
@@ -31,7 +32,7 @@ router.get('/logout', service.logout);
 
 router.use('/users', usersRouter);
 router.use('/catways', catwaysRouter);
-router.use('/',reservationsRouter);
+router.use('/catways',reservationsRouter);
 
 
 router.get('/dashboard', private.checkJWT, async (req, res) => {
@@ -60,6 +61,89 @@ router.get('/dashboard', private.checkJWT, async (req, res) => {
     })
 });
 
+router.get('/reservations', private.checkJWT, async (req, res) => {
+  const id = parseInt(req.query.id)
+  try {
+    if (id) {
+      return res.redirect(`/catways/${id}/reservations`)
+    }
+    return res.render('reservations', {
+      title         : 'Réservations',
+      current       : 'reservations',
+      reservations  : [],        
+      err_notFind   : null,
+      err_msg       : false,
+      catway_num    : ''
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur reservations'})
+  }
+});
+
+router.get('/catways/:id/reservations', private.checkJWT, async (req, res) => {
+  const id = parseInt(req.params.id)
+  try {
+    const catway = await Catway.findOne({catwayNumber : id})
+    if (catway){
+      const reservations = await Reservation.find({catwayNumber : id})
+      return res.render('reservations', {
+        title         : 'Réservations',
+        current       : 'reservations',
+        reservations  : reservations,
+        err_notFind   : reservations.length === 0 ?'Aucune réservation pour ce catway': null ,
+        err_msg       : reservations.length === 0 ? true : false,
+        catway_num    : id
+      })
+    }
+    return res.render('reservations', {
+        title         : 'Réservations',
+        current       : 'reservations',
+        reservations  : [],
+        err_notFind   : `le catway${id} n'existe pas`,
+        err_msg       : true,
+        catway_num    : id
+    })
+  } catch (error) {
+      console.error(error)
+      return res.status(500).json({message : 'erreur serveur reservations list'})
+  }
+});
+
+router.delete('/catways/:id/reservation/:idReservation', private.checkJWT, async (req, res) => {
+  const id            = parseInt(req.params.id)
+  const idReservation = req.params.idReservation
+  try {
+    const catway = await Catway.findOne({catwayNumber : id})
+    if (catway) {
+      const reservation = await Reservation.findById(idReservation)
+      if (reservation) {
+        console.log('N° _id' + idReservation)
+        await Reservation.deleteOne({_id : idReservation})
+        return res.redirect(`/catways/${id}/reservations`)
+      }
+      return res.render('reservations', {
+        title         : 'Réservations',
+        current       : 'reservations',
+        reservations  : reservation,
+        err_notFind   : 'Aucune réservation pour ce catway',
+        err_msg       : true,
+        catway_num    : id
+      })
+    }
+    return res.render('reservations', {
+      title         : 'Réservations',
+      current       : 'reservations',
+      reservations  : [],        
+      err_notFind   : 'Catway non trouvé',
+      err_msg       : true,
+      catway_num    : ''
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur suppression'})
+  }
+});
 
 
 module.exports = router;

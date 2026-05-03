@@ -5,7 +5,6 @@ const Reservation = new schema ({
     catwayNumber    :{
         type        : Number,
         trim        : true,
-        unique      : true,
         required     : [true, "le numéro de catway est obligatoire"],
         min         : [1, "le numero doit etre positif"]
     },

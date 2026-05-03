@@ -13,7 +13,7 @@
     <fieldset>  
         <legend class="m-3">Se connecter</legend>
         <div class="form-floating m-3">
-            <input type="text" name="email" id="mail_log" placeholder="name@mail.com" class="form-control <%= isInvalid ? 'is-invalid' : '' %>">
+            <input type="text" name="email" id="mail_log" placeholder="name@mail.com" class="form-control <%= locals.isInvalid ? 'is-invalid' : '' %>">
             <label for="email">Mail</label>
         </div>
         <div class="form-floating m-3">

@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-/* password_log.addEventListener('input', (e) => {
-    e.target.classList.remove('is-invalid')
-}); */
+async function deleteRes(catwayId, resId) {
+    await fetch(`/catways/${catwayId}/reservations/${resId}`, {
+        method : 'DELETE'
+    })
+    window.location.reload()
+}

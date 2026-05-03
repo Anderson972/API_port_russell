@@ -1,0 +1,77 @@
+<%- include('header.ejs') -%>
+<%- include('navbar.ejs') -%>
+<h1>Réservations</h1>
+<Div class="row">
+    <div class="list_reservations col-6">
+        <form action="/reservations" method="get">
+            <label for="id">N° de catway</label>
+            <input type="number" name="id" placeholder="1" min="1">
+            <button type="submit" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#collapseList" aria-expanded="false" aria-controls="collapseList">
+                Afficher les réservations
+            </button>
+        </form>
+        <h2>Catway n° <%= catway_num %></h2>
+        <div class="mt-3 alert alert-danger <%= err_msg ? 'voir' : '' %>" role="alert">
+                <%= err_notFind %>
+        </div>
+        <div class="collapse <%= reservations.length > 0 ? 'show' : '' %>" id="collapseList">
+            <table class="table text-center align-middle">
+                <thead>
+                    <tr>
+                        <th colspan="2">Information</th>
+                        <th>Durée de réservation</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <% reservations.forEach(reservation => { %>
+                    <tbody class="table-hover-group">
+                        <tr>
+                            <th>N° de reservation</th>
+                            <td><%= reservation._id %></td>
+                            <td rowspan="3">
+                                <%= new Date(reservation.startDate).toLocaleDateString('fr-FR') %> - 
+                                <%= new Date(reservation.endDate).toLocaleDateString('fr-FR') %>
+                            </td>
+                            <td rowspan="3">
+                                <a href="/catways/<%= catway_num %>/reservations/<%= reservation._id %>" class="btn btn-primary">Modifier</a>
+
+                                <!-- Modal confirmation -->
+                                <button type="button" class="btn btn-outline-danger mt-3 d-block" data-bs-toggle="modal" data-bs-target="#deleteConfirmation-<%= reservation._id %>">Supprimer</button>
+                                <div class="modal fade" id="deleteConfirmation-<%= reservation._id %>" tabindex="-1" >
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" >Confirmation</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Etes-vous sure de vouloir supprimer cette réservation ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                                                <button type="submit" class="btn btn-outline-danger" onclick="deleteRes('<%= catway_num %>', '<%= reservation._id %>')">Supprimer</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>   
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Bateau</th>
+                            <td><%= reservation.boatName %></td>
+                            
+                        </tr>
+                        <tr>
+                            <th>Client</th>
+                            <td><%= reservation.clientName %></td>
+                        </tr>
+                    </tbody>
+                <% }) %>
+            </table>
+        </div>
+    </div>
+    <div class="crud_reservations col-6">
+
+    </div>
+</Div>
+<%- include('footer.ejs') -%>

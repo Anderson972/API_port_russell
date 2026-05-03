@@ -1,8 +1,29 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
+.reservations {
+  max-width: 500px;
 }
 
-a {
-  color: #00B7FF;
+
+.date {
+  max-width: 350px;
+  font-weight: bold;
+}
+
+.alert {
+  display: none;
+  max-width: 50%;
+}
+
+.voir {
+  display: inherit;
+}
+
+.table-hover-group:hover th,
+.table-hover-group:hover td {
+  background-color: #f5f5f5;
+  cursor: pointer;
+
+}
+.table-hover-group .btn {
+  width: 120px;
 }

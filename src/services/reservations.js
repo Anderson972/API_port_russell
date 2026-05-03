@@ -27,9 +27,12 @@ exports.getAll = async (req, res, next) => {
 
     
     try {
-        const catway = await Catway.findOne({catwayNumber : id})
+        if (req.accepts('html')) {
+            return next()
+        }
+        const catway = await Catway.findOne({catwayNumber : id})//await Catway.find() "toutes les reservations tous catway confondu"
         if (catway){
-            const reservations = await Reservation.find({catwayNumber : id}) //await Reservation.find() "toutes les reservations tous catway confondu"
+            const reservations = await Reservation.find({catwayNumber : id}) 
             if (reservations.length === 0) {
                 return res.status(404).json({message : "Réservation non trouvée"})
             }
@@ -101,6 +104,7 @@ exports.delete = async (req, res, next) => {
     const idReservation = req.params.idReservation
 
     try {
+        
         const catway = await Catway.findOne({catwayNumber : id})
         if (catway) {
             const reservation = await Reservation.findById(idReservation)

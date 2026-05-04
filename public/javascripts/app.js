@@ -1,3 +1,6 @@
+
+
+//Suppression de la class "is-invalid" lors de l'écriture dans les champs login
 document.addEventListener('DOMContentLoaded', () => {
     const form_log = document.getElementById('form_log');
 
@@ -9,10 +12,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+function succ_msg() {
+    const succ_msg = document.getElementById('succ_msg')
+    succ_msg.classList.add('voir')
+        setTimeout(() => {
+          succ_msg.classList.remove('voir')
+        }, 5000)
+}
+function err_msg() {
+    const succ_msg = document.getElementById('err_msg')
+    succ_msg.classList.add('voir')
+        setTimeout(() => {
+          succ_msg.classList.remove('voir')
+        }, 5000)
+}
 
-async function deleteRes(catwayId, resId) {
-    await fetch(`/catways/${catwayId}/reservations/${resId}`, {
+//Utilisation DELETE via fetch
+async function deleteRes(catwayId, idReservation) {
+    await fetch(`/catways/${catwayId}/reservations/${idReservation}`, {
         method : 'DELETE'
     })
     window.location.reload()
+}
+
+//Utilisation PUT via fetch
+async function updateRes(catwayId, idReservation) {
+    const form = document.getElementById('form_update')
+    const formData = new FormData(form)
+    
+
+   const response = await fetch(`/catways/${catwayId}/reservation/${idReservation}`, {
+        method  : 'PUT',
+        headers : { 'Content-Type': 'application/json' },
+        body    : JSON.stringify(Object.fromEntries(formData))
+    })
+
+    if (response.ok) {
+        succ_msg()
+    }else{
+        err_msg()
+    }
+    
 }

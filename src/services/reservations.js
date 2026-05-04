@@ -51,6 +51,9 @@ exports.getById = async (req, res, next) => {
     const idReservation = req.params.idReservation
 
     try {
+        if (req.accepts('html')) {
+            return next()
+        }
         const catway = await Catway.findOne({catwayNumber : id})
         if(catway) {
             const reservation = await Reservation.findById(idReservation)

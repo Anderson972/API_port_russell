@@ -1,0 +1,46 @@
+<%- include('header.ejs') -%>
+<%- include('navbar.ejs') -%>
+
+<h1><%= title %></h1>
+<% if (!reservation) { %>
+    <div class="mt-3 alert alert-danger <%= err_msg ? 'voir' : '' %>" role="alert">
+                <%= err_notFind %>
+        </div>
+
+<% } else { %>
+    <div class="container-sm">
+        <form class="form-group mt-3" id="form_update">
+            <fieldset>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">N° de catway</span>
+                    <input type="number" name="catwayNumber" class="form-control" value="<%= reservation.catwayNumber %>">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Nom du client</span>
+                    <input type="text" name="clientName" class="form-control" value="<%= reservation.clientName %>">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Nom du bateau</span>
+                    <input type="text" name="boatName" class="form-control" value="<%= reservation.boatName %>">
+                </div>
+                <div class="input-date input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Début de réservation</span>
+                    <input type="date" min="<%= dateMin %>" name="startDate" class="form-control" value="<%= new Date(reservation.startDate).toISOString().split('T')[0] %>" required>
+                </div>
+                <div class="input-date input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Fin de réservation</span>
+                    <input type="date" name="endDate" min="<%= new Date(reservation.startDate).toISOString().split('T')[0] %>" class="form-control" value="<%= new Date(reservation.endDate).toISOString().split('T')[0] %>" required>
+                </div>   
+            </fieldset>
+            <button class="btn btn-primary float-end mt-3" type="button" onclick="updateRes('<%= catway_num %>', '<%= reservation._id %>')">mettre à jour</button>
+            <div id="succ_msg" class="mt-3 alert alert-success " role="alert">
+                Votre réservation a été modifiée
+            </div>
+            <div id="err_msg" class="mt-3 alert alert-danger " role="alert">
+                Erreur lors de votre modification
+            </div>
+        </form>
+        <a href='/catways/<%= catway_num %>/reservations' class="btn btn-outline-primary mt-3">Retour aux réservations</a>
+    </div>
+<% } %>
+<%- include('footer.ejs') -%>

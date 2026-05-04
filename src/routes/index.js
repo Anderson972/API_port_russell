@@ -145,5 +145,94 @@ router.delete('/catways/:id/reservation/:idReservation', private.checkJWT, async
   }
 });
 
+router.get('/catways/:id/reservation/:idReservation', private.checkJWT, async (req, res) => {
+  const id            = parseInt(req.params.id)
+  const idReservation = req.params.idReservation
+  try {
+    const catway = await Catway.findOne({catwayNumber : id})
+    if (catway) {
+      const reservation = await Reservation.findById(idReservation)
+      if (reservation) {
+        return res.render('oneReservation', {
+          title         : 'Réservation n°' + idReservation.toString().slice(0, 5).toUpperCase(),
+          current       : 'reservations',
+          reservationNum: idReservation.toString().slice(0, 5).toUpperCase(),
+          reservation   : reservation,
+          catway_num    : id,
+          dateMin       : new Date().toISOString().split('T')[0]
+
+        })
+      }
+      return res.render('erreur', {
+        title         : 'Réservations',
+        current       : 'reservations',
+        err_notFind   : 'Cette réservation n\'existe pas',
+        err_msg       : true
+      })
+    }
+    return res.render('erreur', {
+      title         : 'Réservations',
+      current       : 'reservations',      
+      err_notFind   : 'Ce catway n\'existe trouvé',
+      err_msg       : true
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur update'})
+  }
+});
+
+router.put('/catways/:id/reservation/:idReservation', private.checkJWT, async (req, res) => {
+  const id            = parseInt(req.params.id)
+  const idReservation = req.params.idReservation
+  const temp = ({
+        catwayNumber    : req.body.catwayNumber,
+        clientName      : req.body.clientName,
+        boatName        : req.body.boatName,
+        startDate       : req.body.startDate,
+        endDate         : req.body.endDate
+    })
+
+  try {
+    const catway = await Catway.findOne({catwayNumber : id})
+
+    if (catway) {
+      const reservation = await Reservation.findById(idReservation)
+      if (reservation) {
+        Object.keys(temp).forEach((key) => {
+          if (!!temp[key]) {
+            reservation[key] = temp[key]
+          };
+        });
+        await reservation.save()
+        console.log('N° _id : ' + reservation)
+        return res.render('oneReservation', {
+          title         : 'Réservation n°' + idReservation.toString().slice(0, 5).toUpperCase(),
+          current       : 'reservations',
+          reservationNum: idReservation.toString().slice(0, 5).toUpperCase(),
+          reservation   : reservation,
+          catway_num    : id,
+          dateMin       : new Date().toISOString().split('T')[0]
+        })
+      }
+      return res.render('erreur', {
+        title         : 'Réservations',
+        current       : 'reservations',
+        err_notFind   : 'Cette réservation n\'existe pas',
+        err_msg       : true
+      })
+    }
+    return res.render('erreur', {
+      title         : 'Réservations',
+      current       : 'reservations',      
+      err_notFind   : 'Ce catway n\'existe trouvé',
+      err_msg       : true
+    })
+  } catch (error) {
+    
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur update'})
+  }
+})
 
 module.exports = router;

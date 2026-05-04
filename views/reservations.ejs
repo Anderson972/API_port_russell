@@ -27,13 +27,13 @@
                     <tbody class="table-hover-group">
                         <tr>
                             <th>N° de reservation</th>
-                            <td><%= reservation._id %></td>
+                            <td><%= reservation._id.toString().slice(0, 5).toUpperCase() %></td>
                             <td rowspan="3">
                                 <%= new Date(reservation.startDate).toLocaleDateString('fr-FR') %> - 
                                 <%= new Date(reservation.endDate).toLocaleDateString('fr-FR') %>
                             </td>
                             <td rowspan="3">
-                                <a href="/catways/<%= catway_num %>/reservations/<%= reservation._id %>" class="btn btn-primary">Modifier</a>
+                                <a href="/catways/<%= catway_num %>/reservation/<%= reservation._id %>" class="btn btn-primary">Modifier</a>
 
                                 <!-- Modal confirmation -->
                                 <button type="button" class="btn btn-outline-danger mt-3 d-block" data-bs-toggle="modal" data-bs-target="#deleteConfirmation-<%= reservation._id %>">Supprimer</button>
@@ -53,7 +53,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>   
+                                </div>
+                                <!-- Fin Modal confirmation -->
                             </td>
                         </tr>
                         <tr>

@@ -1,4 +1,6 @@
-
+main {
+  padding: 15px;
+}
 .reservations {
   max-width: 500px;
 }
@@ -26,4 +28,14 @@
 }
 .table-hover-group .btn {
   width: 120px;
+}
+
+.input-date {
+  width: fit-content;
+}
+
+fieldset {
+  padding: 10px;
+  border: 1px solid #0000002d;
+  border-radius: 6px;
 }

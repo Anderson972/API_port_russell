@@ -69,13 +69,13 @@ router.get('/reservations', private.checkJWT, async (req, res) => {
     return res.render('reservations', {
       title         : 'Réservations',
       current       : 'reservations',
-      reservations  : [],        
+      reservations  : [],
       err_notFind   : null,
       err_msg       : false,
       catway_num    : '',
       dateMin       : new Date().toISOString().split('T')[0],
       succ_msg      : false,
-      err_create    : error
+      err_create    : false
     })
   } catch (error) {
     console.error(error)
@@ -175,7 +175,9 @@ router.get('/catways/:id/reservation/:idReservation', private.checkJWT, async (r
           reservationNum: idReservation.toString().slice(0, 5).toUpperCase(),
           reservation   : reservation,
           catway_num    : id,
-          dateMin       : new Date().toISOString().split('T')[0]
+          dateMin       : new Date().toISOString().split('T')[0],
+          err_notFind   : null,
+          err_msg       : false
 
         })
       }
@@ -221,14 +223,15 @@ router.put('/catways/:id/reservation/:idReservation', private.checkJWT, async (r
           };
         });
         await reservation.save()
-        console.log('N° _id : ' + reservation)
         return res.render('oneReservation', {
           title         : 'Réservation n°' + idReservation.toString().slice(0, 5).toUpperCase(),
           current       : 'reservations',
           reservationNum: idReservation.toString().slice(0, 5).toUpperCase(),
           reservation   : reservation,
           catway_num    : id,
-          dateMin       : new Date().toISOString().split('T')[0]
+          dateMin       : new Date().toISOString().split('T')[0],
+          err_notFind   : null,
+          err_msg       : false
         })
       }
       return res.render('oneReservation', {
@@ -344,5 +347,81 @@ router.post('/catways', private.checkJWT, async (req, res) => {
   }
 });
 
+// Get ONE catway
+router.get('/catways/:id', private.checkJWT, async (req, res) => {
+  const id = parseInt(req.params.id)
+  try {
+    const catway = await Catway.findOne({catwayNumber : id})
+    if (catway) {
+      return res.render('oneCatway', {
+        title       : 'Catway n° ' + id,
+        current     : 'catways',
+        catway      : catway,
+        err_msg     : false,
+        err_notFind : null
+      })
+      
+    }
+    return res.render('oneCatway', {
+        title       : 'Catway n° ' + id,
+        current     : 'catways',
+        catway      : null,
+        err_msg     : true,
+        err_notFind : 'Ce catway n\'existe pas',
+        
+      })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur  onecatways'})
+  }
 
+})
+
+// Update catway
+router.put('/catways/:id', private.checkJWT, async (req, res) => {
+
+  const id = parseInt(req.params.id)
+  const {catwayState} = req.body
+  try {
+    const catway = await Catway.findOne({catwayNumber : id})
+    if (catway) {
+      if(catwayState){
+        catway.catwayState = catwayState
+      }
+      await catway.save()
+      return res.render('oneCatway', {
+        title       : 'Catway n° ' + id,
+        current     : 'catways',
+        catway      : catway,
+        err_msg     : false,
+        err_notFind : '',
+        
+      })
+    }
+    return res.render('oneCatway', {
+        title       : 'Catway n° ' + id,
+        current     : 'catways',
+        catway      : null,
+        err_msg     : true,
+        err_notFind : 'Ce catway n\'existe pas',
+        
+      })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur  update catways'})
+  }
+
+})
+
+//Delete catway
+router.delete('/catways/:id', private.checkJWT, async (req, res) => {
+  const id = parseInt(req.params.id)
+  try {
+    const catway = await Catway.deleteOne({catwayNumber : id})
+    return res.redirect('/catways')
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur  delete catways'})
+  }
+});
 module.exports = router;

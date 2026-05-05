@@ -1,0 +1,37 @@
+<%- include('header.ejs') -%>
+<%- include('navbar.ejs') -%>
+<h1><%= title %></h1>
+<% if (!catway) { %>
+    <div class="mt-3 alert alert-danger <%= err_msg ? 'voir' : '' %>" role="alert">
+                <%= err_notFind %>
+        </div>
+<% } else { %>
+    <div class="container-sm">
+        <form class="form-group mt-3" id="form_update">
+            <fieldset>
+                <div class="input-group mb-3">
+                    <label class="form-label" for="catwayNumber">N° de catway</label>
+                    <input type="number" name="catwayNumber" id="catwayNumber" class="form-control-plaintext" readonly value="<%= catway.catwayNumber %>">
+                </div>
+                <div class="input-group mb-3">
+                    <label class="form-label" for="catwayType">Type de catway</label>
+                    <input type="text" name="catwayType" id="catwayType" class="form-control-plaintext" readonly value="<%= catway.catwayType %>">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="catwayState">Etats du catway</label>
+                    <textarea  name="catwayState" id="catwayState" class="form-control"  required><%= catway.catwayState %></textarea>
+                    <small><em>Maximun 500 caractères</em></small>
+                </div>  
+            </fieldset>
+            <button class="btn btn-primary float-end mt-3" type="button" onclick="updateOne('/catways/<%= catway.catwayNumber %>')">mettre à jour</button>
+            <div id="succ_msg" class="mt-3 alert alert-success " role="alert">
+                Votre catway a été modifiée
+            </div>
+            <div id="err_msg" class="mt-3 alert alert-danger " role="alert">
+                Erreur lors de votre modification
+            </div>
+        </form>
+        <a href='/catways' class="btn btn-outline-primary mt-3">Retour aux catways</a>
+    </div>
+<% } %>
+<%- include('footer.ejs') -%>

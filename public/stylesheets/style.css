@@ -37,3 +37,8 @@ fieldset {
   border: 1px solid #0000002d;
   border-radius: 6px;
 }
+
+.list_catways {
+  max-height: 80vh;
+  overflow-y: auto;
+}

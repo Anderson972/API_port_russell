@@ -28,20 +28,26 @@ function err_msg() {
 }
 
 // DELETE reservation via fetch
-async function deleteRes(path) {
-    await fetch(path, {
+async function deleteOne(path) {
+    const response = await fetch(path, {
         method : 'DELETE'
     })
     window.location.reload()
+
+    if (response.ok) {
+        succ_msg()
+    }else{
+        err_msg()
+    }
 }
 
 //Utilisation PUT via fetch
-async function updateRes(catwayId, idReservation) {
+async function updateOne(path) {
     const form = document.getElementById('form_update')
     const formData = new FormData(form)
     
 
-   const response = await fetch(`/catways/${catwayId}/reservation/${idReservation}`, {
+   const response = await fetch(path, {
         method  : 'PUT',
         headers : { 'Content-Type': 'application/json' },
         body    : JSON.stringify(Object.fromEntries(formData))

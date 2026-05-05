@@ -90,3 +90,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 5000)
     }
 })
+
+//hide create button
+document.addEventListener('DOMContentLoaded', () => {
+    const btn        = document.getElementById('create_btn')
+    const collapse   = document.getElementById('collapseCreate')
+
+    if (btn && collapse) {
+        collapse.addEventListener('show.bs.collapse', () => {
+            btn.classList.add('d-none')
+        })
+
+        collapse.addEventListener('hide.bs.collapse', () => {
+            btn.classList.remove('d-none')
+        })
+    }
+})

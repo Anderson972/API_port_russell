@@ -38,7 +38,20 @@ fieldset {
   border-radius: 6px;
 }
 
-.list_catways {
-  max-height: 80vh;
+.list, .create {
+  height: 80vh;
   overflow-y: auto;
+  width: 48%;
+
+}
+#create_btn {
+  height: fit-content;
+}
+#collapseCreate {
+  width: 70%;
+}
+
+.vr {
+  height: 70vh;
+  align-self: center;
 }

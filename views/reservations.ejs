@@ -10,20 +10,16 @@
             Afficher les réservations
         </button>
     </form>
-    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-title="Afficher les réservations avant de créer">
-        <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#collapseCreate" <%= !catway_num ? 'disabled ' : '' %>>
-            Créer une réservation
-        </button>
-    </span>
+    
 </div>
-<Div class="row">
-    <div class="list_reservations col-6">
+<Div class="row justify-content-center gx-0">
+    <div class="list col-6 p-2">
         <h2>Catway n° <%= catway_num %></h2>
         <div class="mt-3 alert alert-danger <%= err_msg ? 'voir' : '' %>" role="alert">
                 <%= err_notFind %>
         </div>
         <div class="collapse <%= reservations.length > 0 ? 'show' : '' %>" id="collapseList">
-            <table class="table text-center align-middle">
+            <table class="shadow table text-center align-middle">
                 <thead>
                     <tr>
                         <th colspan="2">Information</th>
@@ -79,9 +75,16 @@
             </table>
         </div>
     </div>
-    <div class="create_reservations col-6">
+    <div class="vr"></div>
+    <div class="create d-flex align-items-center justify-content-center col-6">
+        <span id="create_btn" class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-title="Afficher les réservations avant de créer">
+            <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#collapseCreate" <%= !catway_num ? 'disabled ' : '' %>>
+                Créer une réservation
+            </button>
+        </span>
         <div class="collapse" id="collapseCreate">
-            <form class="form-group mt-3" action="/catways/<%= catway_num %>/reservations" method="post">
+            <h3 class="text-center">Créer votre réservation</h3>
+            <form class="shadow form-group mt-3" action="/catways/<%= catway_num %>/reservations" method="post">
                 <fieldset>
                     <div class="form-floating mb-3">
                         <input type="number" name="catwayNumber" class="form-control" min="1" placeholder="" value="<%= catway_num %>">

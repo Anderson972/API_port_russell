@@ -12,12 +12,12 @@
     </form> -->
         
 </div>
-<Div class="row">
-    <div class="list_catways col-6">
+<Div class="row justify-content-center gx-0">
+    <div class="list col-6 p-2">
         <div class="mt-3 alert alert-danger <%= err_msg ? 'voir' : '' %>" role="alert">
                 <%= err_notFind %>
         </div>
-            <table class="table text-center align-middle">
+            <table class="shadow table text-center align-middle">
                 <thead>
                     <tr>
                         <th>N° de catway</th>
@@ -61,12 +61,14 @@
                 <% }) %>
             </table>
     </div>
-    <div class="create_reservations col-6">
-        <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#collapseCreate">
+    <div class="vr"></div>
+    <div class="create d-flex justify-content-center align-items-center col-6">
+        <button id="create_btn" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#collapseCreate">
             Créer un catway
         </button>
         <div class="collapse" id="collapseCreate">
-            <form class="form-group mt-3" action="/catways" method="post">
+            <h3 class="text-center">Créer votre catway</h3>
+            <form class="shadow form-group mt-3" action="/catways" method="post">
                 <fieldset>
                     <div class="form-floating mb-3">
                         <input type="number" name="catwayNumber" class="form-control" min="1" placeholder="">

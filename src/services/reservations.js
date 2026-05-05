@@ -13,6 +13,9 @@ exports.add = async (req, res, next) => {
         endDate         : req.body.endDate
     })
     try {
+        if (req.accepts('html')) {
+            return next()
+        }
         const reservation = await Reservation.create(temp)
         return res.status(201).json(reservation)
     } catch (error) {

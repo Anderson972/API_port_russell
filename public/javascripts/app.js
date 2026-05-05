@@ -54,3 +54,20 @@ async function updateRes(catwayId, idReservation) {
     }
     
 }
+// initialisation des tooltips bootstrap
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el))
+
+//message success 
+document.addEventListener('DOMContentLoaded', () => {
+    const msg = document.getElementById('succ_msg')
+    if (msg && msg.classList.contains('d-block')) {
+        
+        //Nettoyage url
+        window.history.replaceState({}, document.title, window.location.pathname)
+
+        setTimeout(() => {
+            msg.classList.replace('d-block', 'd-none')
+        }, 5000)
+    }
+})

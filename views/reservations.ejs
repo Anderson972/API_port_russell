@@ -1,15 +1,23 @@
 <%- include('header.ejs') -%>
 <%- include('navbar.ejs') -%>
 <h1>Réservations</h1>
+<div class="d-flex justify-content-center align-items-center gap-2 mb-3">
+    
+    <form action="/reservations" method="get" class="d-flex align-items-center gap-2">
+        <label for="id">N° de catway</label>
+        <input type="number" name="id" placeholder="1,2,..." min="1" required class="form-control" style="width: 100px;">
+        <button type="submit" class="btn btn-primary">
+            Afficher les réservations
+        </button>
+    </form>
+    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-title="Afficher les réservations avant de créer">
+        <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#collapseCreate" <%= !catway_num ? 'disabled ' : '' %>>
+            Créer une réservation
+        </button>
+    </span>
+</div>
 <Div class="row">
     <div class="list_reservations col-6">
-        <form action="/reservations" method="get">
-            <label for="id">N° de catway</label>
-            <input type="number" name="id" placeholder="1" min="1">
-            <button type="submit" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#collapseList" aria-expanded="false" aria-controls="collapseList">
-                Afficher les réservations
-            </button>
-        </form>
         <h2>Catway n° <%= catway_num %></h2>
         <div class="mt-3 alert alert-danger <%= err_msg ? 'voir' : '' %>" role="alert">
                 <%= err_notFind %>
@@ -71,8 +79,37 @@
             </table>
         </div>
     </div>
-    <div class="crud_reservations col-6">
-
+    <div class="create_reservations col-6">
+        <div class="collapse" id="collapseCreate">
+            <form class="form-group mt-3" action="/catways/<%= catway_num %>/reservations" method="post">
+                <fieldset>
+                    <div class="form-floating mb-3">
+                        <input type="number" name="catwayNumber" class="form-control" min="1" placeholder="" value="<%= catway_num %>">
+                        <label for="catwayNumber">N° de catway</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="clientName" class="form-control" placeholder="" required>
+                        <label for="clientName">Nom du client</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="boatName" class="form-control" placeholder="" required>
+                        <label for="boatName">Nom du bateau</label>
+                    </div>
+                    <div class="input-date mb-3">
+                        <label for="startDate">Début de réservation</label>
+                        <input type="date" min="<%= dateMin %>" name="startDate" class="form-control" required>
+                    </div>
+                    <div class="input-date mb-3">
+                        <label for="endDate">Fin de réservation</label>
+                        <input type="date" name="endDate" min="<%= dateMin %>" class="form-control" required>
+                    </div>   
+                </fieldset>
+                <button type="submit" class="btn btn-primary mt-3 float-end" >Créer la réservation</button>
+            </form>
+        </div>
+        <div id="succ_msg" class="mt-3 alert alert-success <%= locals.succ_msg ? 'd-block' : 'd-none' %>" role="alert">
+            Votre réservation a été Créée
+        </div>
     </div>
 </Div>
 <%- include('footer.ejs') -%>

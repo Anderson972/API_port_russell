@@ -34,7 +34,7 @@ router.use('/users', usersRouter);
 router.use('/catways', catwaysRouter);
 router.use('/catways',reservationsRouter);
 
-
+//Accès Tableau de bord
 router.get('/dashboard', private.checkJWT, async (req, res) => {
   
   const catway = await Catway.find()        
@@ -61,6 +61,7 @@ router.get('/dashboard', private.checkJWT, async (req, res) => {
     })
 });
 
+//Crud reservation
 router.get('/reservations', private.checkJWT, async (req, res) => {
   const id = parseInt(req.query.id)
   try {
@@ -73,16 +74,19 @@ router.get('/reservations', private.checkJWT, async (req, res) => {
       reservations  : [],        
       err_notFind   : null,
       err_msg       : false,
-      catway_num    : ''
+      catway_num    : '',
+      dateMin       : new Date().toISOString().split('T')[0],
+      succ_msg      : false
     })
   } catch (error) {
     console.error(error)
     return res.status(500).json({message : 'erreur serveur reservations'})
   }
 });
-
+//All réservation par catway
 router.get('/catways/:id/reservations', private.checkJWT, async (req, res) => {
   const id = parseInt(req.params.id)
+  const success  = req.query.success === 'true'
   try {
     const catway = await Catway.findOne({catwayNumber : id})
     if (catway){
@@ -93,7 +97,9 @@ router.get('/catways/:id/reservations', private.checkJWT, async (req, res) => {
         reservations  : reservations,
         err_notFind   : reservations.length === 0 ?'Aucune réservation pour ce catway': null ,
         err_msg       : reservations.length === 0 ? true : false,
-        catway_num    : id
+        catway_num    : id,
+        dateMin       : new Date().toISOString().split('T')[0],
+        succ_msg      : success
       })
     }
     return res.render('reservations', {
@@ -102,7 +108,9 @@ router.get('/catways/:id/reservations', private.checkJWT, async (req, res) => {
         reservations  : [],
         err_notFind   : `le catway${id} n'existe pas`,
         err_msg       : true,
-        catway_num    : id
+        catway_num    : id,
+        dateMin       : new Date().toISOString().split('T')[0],
+        succ_msg      : false
     })
   } catch (error) {
       console.error(error)
@@ -110,6 +118,7 @@ router.get('/catways/:id/reservations', private.checkJWT, async (req, res) => {
   }
 });
 
+// Suppression d'une réservation d'un catway
 router.delete('/catways/:id/reservation/:idReservation', private.checkJWT, async (req, res) => {
   const id            = parseInt(req.params.id)
   const idReservation = req.params.idReservation
@@ -128,7 +137,9 @@ router.delete('/catways/:id/reservation/:idReservation', private.checkJWT, async
         reservations  : reservation,
         err_notFind   : 'Aucune réservation pour ce catway',
         err_msg       : true,
-        catway_num    : id
+        catway_num    : id,
+        dateMin       : new Date().toISOString().split('T')[0],
+        succ_msg      : false
       })
     }
     return res.render('reservations', {
@@ -137,7 +148,9 @@ router.delete('/catways/:id/reservation/:idReservation', private.checkJWT, async
       reservations  : [],        
       err_notFind   : 'Catway non trouvé',
       err_msg       : true,
-      catway_num    : ''
+      catway_num    : '',
+      dateMin       : new Date().toISOString().split('T')[0],
+      succ_msg      : false
     })
   } catch (error) {
     console.error(error)
@@ -145,6 +158,7 @@ router.delete('/catways/:id/reservation/:idReservation', private.checkJWT, async
   }
 });
 
+// affichage d'une réservation
 router.get('/catways/:id/reservation/:idReservation', private.checkJWT, async (req, res) => {
   const id            = parseInt(req.params.id)
   const idReservation = req.params.idReservation
@@ -182,6 +196,7 @@ router.get('/catways/:id/reservation/:idReservation', private.checkJWT, async (r
   }
 });
 
+// modiffication d'une réservation
 router.put('/catways/:id/reservation/:idReservation', private.checkJWT, async (req, res) => {
   const id            = parseInt(req.params.id)
   const idReservation = req.params.idReservation
@@ -215,14 +230,14 @@ router.put('/catways/:id/reservation/:idReservation', private.checkJWT, async (r
           dateMin       : new Date().toISOString().split('T')[0]
         })
       }
-      return res.render('erreur', {
+      return res.render('oneReservation', {
         title         : 'Réservations',
         current       : 'reservations',
         err_notFind   : 'Cette réservation n\'existe pas',
         err_msg       : true
       })
     }
-    return res.render('erreur', {
+    return res.render('oneReservation', {
       title         : 'Réservations',
       current       : 'reservations',      
       err_notFind   : 'Ce catway n\'existe trouvé',
@@ -232,6 +247,43 @@ router.put('/catways/:id/reservation/:idReservation', private.checkJWT, async (r
     
     console.error(error)
     return res.status(500).json({message : 'erreur serveur update'})
+  }
+})
+
+// Ajout d'une réservation d'un catway
+router.post('/catways/:id/reservations', private.checkJWT, async (req, res) => {
+  const id            = parseInt(req.params.id)
+  const temp = ({
+    catwayNumber    : req.body.catwayNumber,
+    clientName      : req.body.clientName,
+    boatName        : req.body.boatName,
+    startDate       : req.body.startDate,
+    endDate         : req.body.endDate
+  })
+
+  try {
+    let succ_msg = true
+    const catway = await Catway.findOne({catwayNumber : id})
+    if (catway) {
+      const reservation = await Reservation.create(temp)
+      if (reservation) {
+        return res.redirect(`/catways/${id}/reservations?success=true`)
+      }
+      
+    }
+    return res.render('reservations', {
+        title         : 'Réservations',
+        current       : 'reservations',
+        reservations  : [],
+        err_notFind   : `le catway${id} n'existe pas`,
+        err_msg       : true,
+        catway_num    : id,
+        dateMin       : new Date().toISOString().split('T')[0],
+        succ_msg      : false
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur add'})
   }
 })
 

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
+//update success
 function succ_msg() {
     const succ_msg = document.getElementById('succ_msg')
     succ_msg.classList.add('voir')
@@ -27,9 +27,9 @@ function err_msg() {
         }, 5000)
 }
 
-//Utilisation DELETE via fetch
-async function deleteRes(catwayId, idReservation) {
-    await fetch(`/catways/${catwayId}/reservations/${idReservation}`, {
+// DELETE reservation via fetch
+async function deleteRes(path) {
+    await fetch(path, {
         method : 'DELETE'
     })
     window.location.reload()
@@ -58,9 +58,22 @@ async function updateRes(catwayId, idReservation) {
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el))
 
-//message success 
+//create success 
 document.addEventListener('DOMContentLoaded', () => {
     const msg = document.getElementById('succ_msg')
+    if (msg && msg.classList.contains('d-block')) {
+        
+        //Nettoyage url
+        window.history.replaceState({}, document.title, window.location.pathname)
+
+        setTimeout(() => {
+            msg.classList.replace('d-block', 'd-none')
+        }, 5000)
+    }
+})
+// create error
+document.addEventListener('DOMContentLoaded', () => {
+    const msg = document.getElementById('err_create')
     if (msg && msg.classList.contains('d-block')) {
         
         //Nettoyage url

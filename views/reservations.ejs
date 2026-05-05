@@ -57,7 +57,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
-                                                <button type="submit" class="btn btn-outline-danger" onclick="deleteRes('<%= catway_num %>', '<%= reservation._id %>')">Supprimer</button>
+                                                <button type="submit" class="btn btn-outline-danger" onclick="deleteRes(`/catways/<%= catway_num %> /reservations/<%= reservation._id %>`)">Supprimer</button>
                                             </div>
                                         </div>
                                     </div>
@@ -109,6 +109,9 @@
         </div>
         <div id="succ_msg" class="mt-3 alert alert-success <%= locals.succ_msg ? 'd-block' : 'd-none' %>" role="alert">
             Votre réservation a été Créée
+        </div>
+        <div id="err_msg" class="mt-3 alert alert-danger <%= locals.err_create ? 'd-block' : 'd-none' %>" role="alert">
+            Une erreur s'est produite lors de la création de votre réservation
         </div>
     </div>
 </Div>

@@ -45,10 +45,7 @@ router.get('/dashboard', private.checkJWT, async (req, res) => {
         weekday   : 'long',
         day       : '2-digit',
         month     : 'long',
-        year      : 'numeric'}) + ' ' + now.toLocaleTimeString('fr-FR', { 
-        hour      : '2-digit',
-        minute    : '2-digit',
-        second    : '2-digit',
+        year      : 'numeric'
     });
 
     res.render('dashboard',{
@@ -60,8 +57,9 @@ router.get('/dashboard', private.checkJWT, async (req, res) => {
         reservations    : reservation
     })
 });
+// début Crud Réservation
 
-//Crud reservation
+//reservation
 router.get('/reservations', private.checkJWT, async (req, res) => {
   const id = parseInt(req.query.id)
   try {
@@ -76,7 +74,8 @@ router.get('/reservations', private.checkJWT, async (req, res) => {
       err_msg       : false,
       catway_num    : '',
       dateMin       : new Date().toISOString().split('T')[0],
-      succ_msg      : false
+      succ_msg      : false,
+      err_create    : error
     })
   } catch (error) {
     console.error(error)
@@ -87,6 +86,7 @@ router.get('/reservations', private.checkJWT, async (req, res) => {
 router.get('/catways/:id/reservations', private.checkJWT, async (req, res) => {
   const id = parseInt(req.params.id)
   const success  = req.query.success === 'true'
+  const error = req.query.error === 'true'
   try {
     const catway = await Catway.findOne({catwayNumber : id})
     if (catway){
@@ -99,7 +99,8 @@ router.get('/catways/:id/reservations', private.checkJWT, async (req, res) => {
         err_msg       : reservations.length === 0 ? true : false,
         catway_num    : id,
         dateMin       : new Date().toISOString().split('T')[0],
-        succ_msg      : success
+        succ_msg      : success,
+        err_create    : error
       })
     }
     return res.render('reservations', {
@@ -110,14 +111,14 @@ router.get('/catways/:id/reservations', private.checkJWT, async (req, res) => {
         err_msg       : true,
         catway_num    : id,
         dateMin       : new Date().toISOString().split('T')[0],
-        succ_msg      : false
+        succ_msg      : false,
+        err_create    : false
     })
   } catch (error) {
       console.error(error)
       return res.status(500).json({message : 'erreur serveur reservations list'})
   }
 });
-
 // Suppression d'une réservation d'un catway
 router.delete('/catways/:id/reservation/:idReservation', private.checkJWT, async (req, res) => {
   const id            = parseInt(req.params.id)
@@ -139,7 +140,8 @@ router.delete('/catways/:id/reservation/:idReservation', private.checkJWT, async
         err_msg       : true,
         catway_num    : id,
         dateMin       : new Date().toISOString().split('T')[0],
-        succ_msg      : false
+        succ_msg      : false,
+        err_create    : error
       })
     }
     return res.render('reservations', {
@@ -150,14 +152,14 @@ router.delete('/catways/:id/reservation/:idReservation', private.checkJWT, async
       err_msg       : true,
       catway_num    : '',
       dateMin       : new Date().toISOString().split('T')[0],
-      succ_msg      : false
+      succ_msg      : false,
+      err_create    : error
     })
   } catch (error) {
     console.error(error)
     return res.status(500).json({message : 'erreur serveur suppression'})
   }
 });
-
 // affichage d'une réservation
 router.get('/catways/:id/reservation/:idReservation', private.checkJWT, async (req, res) => {
   const id            = parseInt(req.params.id)
@@ -195,7 +197,6 @@ router.get('/catways/:id/reservation/:idReservation', private.checkJWT, async (r
     return res.status(500).json({message : 'erreur serveur update'})
   }
 });
-
 // modiffication d'une réservation
 router.put('/catways/:id/reservation/:idReservation', private.checkJWT, async (req, res) => {
   const id            = parseInt(req.params.id)
@@ -249,7 +250,6 @@ router.put('/catways/:id/reservation/:idReservation', private.checkJWT, async (r
     return res.status(500).json({message : 'erreur serveur update'})
   }
 })
-
 // Ajout d'une réservation d'un catway
 router.post('/catways/:id/reservations', private.checkJWT, async (req, res) => {
   const id            = parseInt(req.params.id)
@@ -269,7 +269,7 @@ router.post('/catways/:id/reservations', private.checkJWT, async (req, res) => {
       if (reservation) {
         return res.redirect(`/catways/${id}/reservations?success=true`)
       }
-      
+      return res.redirect(`/catways/${id}/reservations?error=true`)
     }
     return res.render('reservations', {
         title         : 'Réservations',
@@ -279,12 +279,70 @@ router.post('/catways/:id/reservations', private.checkJWT, async (req, res) => {
         err_msg       : true,
         catway_num    : id,
         dateMin       : new Date().toISOString().split('T')[0],
-        succ_msg      : false
+        succ_msg      : false,
+        err_create    : false
     })
   } catch (error) {
     console.error(error)
     return res.status(500).json({message : 'erreur serveur add'})
   }
 })
+// Fin Crud Féservation
+
+// début Crud Catways
+
+// ALL catways
+router.get('/catways', private.checkJWT, async (req, res) => {
+  const catways = await Catway.find()
+  const success = req.query.success === 'true'
+  const error = req.query.error === 'true'
+  try {
+    if (catways) {
+      return res.render('catways', {
+      title         : 'Catways',
+      current       : 'catways',
+      catways       : catways,        
+      err_notFind   : null,
+      err_msg       : false,
+      catway_num    : '',
+      succ_msg      : success,
+      err_create    : error
+    })
+    }
+    return res.render('catways', {
+      title         : 'Catways',
+      current       : 'catways',
+      catways       : [],        
+      err_notFind   : 'Aucun catways enregistré',
+      err_msg       : true,
+      catway_num    : '',
+      succ_msg      : false,
+      err_create    : false
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur catways'})
+  }
+});
+
+// create catway
+router.post('/catways', private.checkJWT, async (req, res) => {
+  const temp = ({
+    catwayNumber    : req.body.catwayNumber,
+    catwayType      : req.body.catwayType,
+    catwayState     : req.body.catwayState
+  });
+  try {
+    const catway = await Catway.create(temp)
+    if (catway) {
+      return res.redirect('/catways?success=true')
+    }
+    return res.redirect('/catways?error=true')
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur create catways'})
+  }
+});
+
 
 module.exports = router;

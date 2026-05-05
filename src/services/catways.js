@@ -21,6 +21,9 @@ exports.getAll = async (req, res, next) => {
     
 
     try {
+        if (req.accepts('html')) {
+            return next()
+        }
         const catways = await Catway.find()
         if (catways.length === 0){
             return res.status(404).json({message : "aucun catway trouvé"})
@@ -36,6 +39,9 @@ exports.getById = async (req, res, next) => {
 
     let id = req.params.id
     try {
+        if (req.accepts('html')) {
+            return next()
+        }
         const catway = await Catway.findOne({catwayNumber : id})
         if(catway){
             return res.status(200).json(catway)

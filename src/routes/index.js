@@ -5,13 +5,14 @@ const service = require('../services/users')
 
 const Reservation = require('../models/reservation');
 const Catway = require('../models/catway');
+const User = require('../models/user');
 
 // Routes
 const catwaysRouter = require('./catways');
 const usersRouter = require('./users');
 const reservationsRouter = require('./reservations');
 const reservation = require('../models/reservation');
-// const reservation = require('../models/reservation');
+
 
 
 
@@ -293,13 +294,12 @@ router.post('/catways/:id/reservations', private.checkJWT, async (req, res) => {
 // Fin Crud Féservation
 
 // début Crud Catways
-
 // ALL catways
 router.get('/catways', private.checkJWT, async (req, res) => {
-  const catways = await Catway.find()
   const success = req.query.success === 'true'
   const error = req.query.error === 'true'
   try {
+    const catways = await Catway.find()
     if (catways) {
       return res.render('catways', {
       title         : 'Catways',
@@ -360,7 +360,6 @@ router.get('/catways/:id', private.checkJWT, async (req, res) => {
         err_msg     : false,
         err_notFind : null
       })
-      
     }
     return res.render('oneCatway', {
         title       : 'Catway n° ' + id,
@@ -374,8 +373,7 @@ router.get('/catways/:id', private.checkJWT, async (req, res) => {
     console.error(error)
     return res.status(500).json({message : 'erreur serveur  onecatways'})
   }
-
-})
+});
 
 // Update catway
 router.put('/catways/:id', private.checkJWT, async (req, res) => {
@@ -410,8 +408,7 @@ router.put('/catways/:id', private.checkJWT, async (req, res) => {
     console.error(error)
     return res.status(500).json({message : 'erreur serveur  update catways'})
   }
-
-})
+});
 
 //Delete catway
 router.delete('/catways/:id', private.checkJWT, async (req, res) => {
@@ -422,6 +419,136 @@ router.delete('/catways/:id', private.checkJWT, async (req, res) => {
   } catch (error) {
     console.error(error)
     return res.status(500).json({message : 'erreur serveur  delete catways'})
+  }
+});
+//Fin CRUD catway
+
+//Début CRUD users
+//All users
+router.get('/users', private.checkJWT, async (req, res) => {
+  
+  const success = req.query.success === 'true'
+  const error = req.query.error === 'true'
+  try {
+    const users = await User.find()
+    if (users) {
+      return res.render('users', {
+      title         : 'Utilisateurs',
+      current       : 'users',
+      users         : users,        
+      err_notFind   : null,
+      err_msg       : false,
+      succ_msg      : success,
+      err_create    : error
+    })
+    }
+    return res.render('users', {
+      title         : 'Utilisateurs',
+      current       : 'users',
+      users         : [],        
+      err_notFind   : 'Aucun utilisateurs enregistré',
+      err_msg       : true,
+      succ_msg      : false,
+      err_create    : false
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur users'})
+  }
+});
+
+// create user
+router.post('/users', private.checkJWT, async (req, res) => {
+  const temp = ({
+        username    : req.body.username,
+        email       : req.body.email,
+        password    : req.body.password
+    });
+  try {
+    const user = await User.create(temp)
+    return res.redirect('/users?success=true')
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur create user'})
+  }
+});
+
+//get one user
+router.get('/users/:email', private.checkJWT, async (req, res) => {
+  const email = req.params.email
+  try {
+    const user = await User.findOne({email : email})
+    if (user) {
+      return res.render('oneUser', {
+        title       : user.username,
+        current     : 'users',
+        user        : user,
+        err_msg     : false,
+        err_notFind : null
+      })
+    }
+    return res.render('oneUser', {
+        title       : user.username,
+        current     : 'users',
+        catway      : null,
+        err_msg     : true,
+        err_notFind : 'Cet utilisateur n\'existe pas',
+      })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur  oneuser'})
+  }
+});
+
+// update user
+router.put('/users/:email', private.checkJWT, async (req, res) => {
+
+  const email = req.params.email
+  const temp = ({
+        username    : req.body.username,
+        email       : req.body.email,
+        password    : req.body.password
+    })
+  try {
+    const user = await User.findOne({email : email})
+    if (user) {
+      Object.keys(temp).forEach((key) => {
+          if (!!user[key]) {
+          user[key] = temp[key]
+        }
+      });
+      await user.save()
+      return res.render('oneUser', {
+        title       : user.username,
+        current     : 'users',
+        user        : user,
+        err_msg     : false,
+        err_notFind : '',
+      })
+    };
+    return res.render('oneUser', {
+        title       : user.username,
+        current     : 'users',
+        user        : null,
+        err_msg     : true,
+        err_notFind : 'Cet utilisateur n\'existe pas',
+        
+      })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur  update catways'})
+  }
+});
+
+// delete user
+router.delete('/users/:email', private.checkJWT, async (req, res) => {
+  const email = req.params.email
+  try {
+    const user = await User.deleteOne({email : email})
+    return res.redirect('/users')
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur delete users'})
   }
 });
 module.exports = router;

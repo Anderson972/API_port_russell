@@ -55,3 +55,11 @@ fieldset {
   height: 70vh;
   align-self: center;
 }
+#war_msg {
+  display: inherit;
+  max-width: 100%;
+}
+
+#notSame {
+  color: #dc3545;
+}

@@ -11,6 +11,9 @@ exports.add = async (req, res, next) => {
         password    : req.body.password
     })
     try {
+        if (req.accepts('html')) {
+            return next()
+        }
         const user = await User.create(temp)
         return res.status(201).json(user)
     } catch (error) {
@@ -22,6 +25,9 @@ exports.add = async (req, res, next) => {
 exports.getAll = async (req, res, next) => {
 
     try {
+        if (req.accepts('html')) {
+            return next()
+        }
         const users = await User.find()
         if (users.length === 0) {
             return res.status(404).json({message : "aucun utilisateur trouvé"})
@@ -37,6 +43,9 @@ exports.getByMail = async (req, res, next) => {
     const email = req.params.email
 
     try {
+        if (req.accepts('html')) {
+            return next()
+        }
         const user = await User.findOne({email : email.toLowerCase()})
         if (user) {
             console.log(user)
@@ -95,8 +104,6 @@ exports.delete = async (req, res, next) => {
 
 exports.authenticate = async (req, res, next) =>{
     const {email, password} = req.body;
-
-
     try{
 
         const user = await User.findOne({email: email}, '+password');

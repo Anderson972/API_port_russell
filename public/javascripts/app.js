@@ -20,10 +20,10 @@ function succ_msg() {
         }, 5000)
 }
 function err_msg() {
-    const succ_msg = document.getElementById('err_msg')
+    const err_msg = document.getElementById('err_msg')
     succ_msg.classList.add('voir')
         setTimeout(() => {
-          succ_msg.classList.remove('voir')
+          err_msg.classList.remove('voir')
         }, 5000)
 }
 

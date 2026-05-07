@@ -27,7 +27,83 @@ router.get('/', (req, res) => {
 });
 
 //Gestion de la connexion
+
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Authentification utilisateur
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "john@mail.com"
+ *               password:
+ *                 type: string
+ *                 example: "MonMotDePasse@123"
+ *     responses:
+ *       200:
+ *         description: Authentification réussie
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "authenticate_success"
+ *       403:
+ *         description: Mot de passe incorrect
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "wrong_credentials"
+ *       404:
+ *         description: Utilisateur non trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "user_not_found"
+ *       500:
+ *         description: Erreur serveur
+ */
 router.post('/login', service.authenticate);
+/**
+ * @swagger
+ * /logout:
+ *   get:
+ *     summary: Déconnexion utilisateur
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Déconnexion réussie
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "logout_success"
+ */
 router.get('/logout', service.logout);
 
 

@@ -11,6 +11,34 @@ const usersRouter = require('./src/routes/users');
 const catwaysRouter = require('./src/routes/catways');
 const reservationsRouter = require('./src/routes/reservations');
 
+const swaggerUi   = require('swagger-ui-express')
+const swaggerJsDoc = require('swagger-jsdoc')
+
+const swaggerOptions = {
+    definition: {
+        openapi : '3.0.0',
+        info    : {
+            title       : 'API Port Russell',
+            version     : '1.0.0',
+            description : 'API de gestion des catways et réservations'
+        },
+        servers: [
+            { url: 'http://localhost:3000' }
+        ],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type   : 'http',
+                    scheme : 'bearer',
+                    bearerFormat: 'JWT'
+                }
+            }
+        }
+    },
+    apis: ['./src/routes/*.js']
+};
+
+
 mongodb.initClientDbConnection();
 
 const app = express();
@@ -43,14 +71,22 @@ app.use(session({
     }
 }));
 
+/* const swaggerDocs = swaggerJsDoc(swaggerOptions)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs)) */
+
+
+try {
+    const swaggerDocs = swaggerJsDoc(swaggerOptions)
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+} catch (error) {
+    console.error('Erreur Swagger :', error.message)
+}
+
 app.use('/', (req, res, next) => {
     console.log(`${req.method} ${req.url}`)
     next()
 })
 
-/* app.use('/', usersRouter);
-app.use('/', catwaysRouter);
-app.use('/', reservationsRouter); */
 app.use('/', indexRouter);
 
 

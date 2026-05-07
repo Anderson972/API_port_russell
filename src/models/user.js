@@ -26,7 +26,6 @@ const User = new schema ({
     password    :{
         type        : String,
         trim        : true,
-        /* minlength   : [8, "Minimun 8 caractères"], */
         maxlength   : [128, "Maximun 128 caractères"],
         select      : false,
         match       : [/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial']

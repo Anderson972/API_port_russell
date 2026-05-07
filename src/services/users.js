@@ -126,9 +126,11 @@ exports.authenticate = async (req, res, next) =>{
                         expiresIn: expiresIn
                     });
                     
+                    if (req.headers['content-type'] === 'application/json') {
+                        return res.status(200).json({ token })
+                    }
+
                     req.session.token = token
-
-
                     return res.redirect('/dashboard');
                 }
 

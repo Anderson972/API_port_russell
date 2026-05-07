@@ -13,6 +13,7 @@
     
 </div>
 <Div class="row justify-content-center gx-0">
+    <!-- List reservation -->
     <div class="list col-6 p-2">
         <h2>Catway n° <%= catway_num %></h2>
         <div class="mt-3 alert alert-danger <%= err_msg ? 'voir' : '' %>" role="alert">
@@ -76,6 +77,7 @@
         </div>
     </div>
     <div class="vr"></div>
+    <!-- Create reservation -->
     <div class="create d-flex align-items-center justify-content-center col-6">
         <span id="create_btn" class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-title="Afficher les réservations avant de créer">
             <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#collapseCreate" <%= !catway_num ? 'disabled ' : '' %>>
@@ -84,27 +86,29 @@
         </span>
         <div class="collapse" id="collapseCreate">
             <h3 class="text-center">Créer votre réservation</h3>
-            <form class="shadow form-group mt-3" action="/catways/<%= catway_num %>/reservations" method="post">
+            <form id="form_create" class="shadow form-group mt-3" action="/catways/<%= catway_num %>/reservations" method="post">
                 <fieldset>
                     <div class="form-floating mb-3">
                         <input type="number" name="catwayNumber" class="form-control" min="1" placeholder="" value="<%= catway_num %>">
                         <label for="catwayNumber">N° de catway</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" name="clientName" class="form-control" placeholder="" required>
+                        <input id="clientName" type="text" name="clientName" class="form-control" placeholder="" required>
                         <label for="clientName">Nom du client</label>
+                        <small id="msg_client" class="invalid-feedback" hidden>Min 3 caractères</small>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" name="boatName" class="form-control" placeholder="" required>
+                        <input id="boatName" type="text" name="boatName" class="form-control" placeholder="" required>
                         <label for="boatName">Nom du bateau</label>
+                        <small id="msg_boat" class="invalid-feedback" hidden>Min 3 caractères</small>
                     </div>
                     <div class="input-date mb-3">
                         <label for="startDate">Début de réservation</label>
-                        <input type="date" min="<%= dateMin %>" name="startDate" class="form-control" required>
+                        <input id="startDate" type="date" min="<%= dateMin %>" name="startDate" class="form-control" required>
                     </div>
                     <div class="input-date mb-3">
                         <label for="endDate">Fin de réservation</label>
-                        <input type="date" name="endDate" min="<%= dateMin %>" class="form-control" required>
+                        <input id="endDate" type="date" name="endDate" min="<%= dateMin %>" class="form-control" required>
                     </div>   
                 </fieldset>
                 <button type="submit" class="btn btn-primary mt-3 float-end" >Créer la réservation</button>

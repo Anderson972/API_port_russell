@@ -38,25 +38,33 @@ router.use('/catways',reservationsRouter);
 //Accès Tableau de bord
 router.get('/dashboard', private.checkJWT, async (req, res) => {
   
-  const catway = await Catway.find()        
-  const reservation = await Reservation.find()
+  
+  try {
+    
+    const catway = await Catway.find() 
+          
+    const reservations = await Reservation.find().sort({ startDate: -1 })
 
-  const now = new Date();
+    const now = new Date();
     const date_now = now.toLocaleString('fr-FR', {
-        weekday   : 'long',
-        day       : '2-digit',
-        month     : 'long',
-        year      : 'numeric'
+      weekday   : 'long',
+      day       : '2-digit',
+      month     : 'long',
+      year      : 'numeric'
     });
-
-    res.render('dashboard',{
-        title   : 'Tableau de bord',
-        current : 'dashboard',
-        username: req.decoded.user.username,
-        mail    : req.decoded.user.email,
-        date_now: date_now,
-        reservations    : reservation
+    return res.render('dashboard',{
+      title           : 'Tableau de bord',
+      current         : 'dashboard',
+      username        : req.decoded.user.username,
+      mail            : req.decoded.user.email,
+      date_now        : date_now,
+      reservations    : reservations
     })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message : 'erreur serveur reservations'})
+  }
+  
 });
 // début Crud Réservation
 
@@ -299,7 +307,7 @@ router.get('/catways', private.checkJWT, async (req, res) => {
   const success = req.query.success === 'true'
   const error = req.query.error === 'true'
   try {
-    const catways = await Catway.find()
+    const catways = await Catway.find().sort({catwayNumber : 1})
     if (catways) {
       return res.render('catways', {
       title         : 'Catways',

@@ -19,15 +19,39 @@
                     <span class="input-group-text" id="email">Email</span>
                     <input type="email" name="email" class="form-control" value="<%= user.email %>">
                 </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="password">Mot de passe</span>
-                    <input type="password" name="password" class="form-control" value="">
-                    <div class="mt-3 alert alert-warning" role="alert">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Mot de passe</span>
+                        <input id="password" type="password" name="password" class="form-control" placeholder="" required>
+                        <button class="btn btn-outline-secondary" type="button" id="btnHide" onclick="hidePassword('password','btnHide')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
+                            <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+                            <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text">Confirmez le mot de passe</span>
+                        <input id="passwordConfirmed" type="password" name="passwordConfirmed" class="form-control" required>
+                        <button class="btn btn-outline-secondary" type="button" id="btnHide2" onclick="hidePassword('passwordConfirmed','btnHide2')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
+                            <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+                            <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <small id="notSame" class="" hidden>le mot de passe n'est pas identique !</small>
+                    <div id="war_msg" class="mt-3 alert alert-warning" role="alert">
                         <small>
-
+                            Le mot de passe doit contenir au moins :
                         </small>
-                    </div> 
-                </div> 
+                        <ul>
+                            <li><small>8 caractères</small></li>
+                            <li><small>Une majuscule</small></li>
+                            <li><small>Une minuscule</small></li>
+                            <li><small>Un chiffre</small></li>
+                            <li><small>Un caractère spécial</small></li>
+                        </ul>
+                    </div>
             </fieldset>
             <button class="btn btn-primary float-end mt-3" type="button" onclick="updateOne(`/users/<%= user.email %>`)">mettre à jour</button>
             <div id="succ_msg" class="mt-3 alert alert-success " role="alert">

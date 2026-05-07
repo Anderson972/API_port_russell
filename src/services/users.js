@@ -133,8 +133,10 @@ exports.authenticate = async (req, res, next) =>{
                 }
 
                 return res.render('index', {
-                    title   : "Accueil - se connecter",
-                    errors  : "mot de passe incorrect"
+                    title       : "Accueil - se connecter",
+                    errors      : "mot de passe incorrect",
+                    mail        : email,
+                    isInvalid   : true
                 });
             });
         } else{

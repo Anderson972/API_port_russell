@@ -1,0 +1,26 @@
+<%- include('header.ejs') -%>
+<%- include('navbar.ejs') -%>
+<h1>Tableau de bord</h1>
+<div class="date card">
+    <time class="text-center" datetime="YYYY-MM-DD"><%= date_now %></time>
+</div>
+<div class="welcom container-md mx-auto d-flex justify-content-around mb-4">
+    <h1>Bienvenue, <span class="text-primary"><%= username %> !</span></h1>
+    <span><%= mail %></span>
+</div>
+<div class="reservations container-sm mx-auto mb-4">
+    <h2 class="text-center">Réservations en cours</h2>
+    <table class="shadow table table-hover text-center">
+        <% reservations.forEach(reservation => { %>
+        <tr>
+            <td><%= reservation.boatName %></td>
+            <td><%= new Date(reservation.startDate).toLocaleDateString('fr-FR') %></td>
+        </tr>
+        <% }) %>
+    </table>
+    
+     <a href="/reservations" class="btn btn-primary">Voir les réservations</a>
+</div>
+<%- include('footer.ejs') -%>
+
+

@@ -1,8 +1,66 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+main {
+  min-height: 90vh;
+  padding: 15px;
+}
+.reservations {
+  max-width: 500px;
 }
 
-a {
-  color: #00B7FF;
+
+.date {
+  max-width: 350px;
+  font-weight: bold;
+}
+
+.alert {
+  display: none;
+  max-width: 50%;
+}
+
+.voir {
+  display: inherit;
+}
+
+.table-hover-group:hover th,
+.table-hover-group:hover td {
+  background-color: #f5f5f5;
+}
+.table-hover-group .btn {
+  width: 120px;
+}
+
+.input-date {
+  width: fit-content;
+}
+
+fieldset {
+  padding: 10px;
+  border: 1px solid #0000002d;
+  border-radius: 6px;
+}
+
+.list, .create {
+  height: 80vh;
+  overflow-y: auto;
+  width: 48%;
+
+}
+#create_btn {
+  height: fit-content;
+}
+#collapseCreate {
+  width: 70%;
+}
+
+.vr {
+  height: 70vh;
+  align-self: center;
+}
+#war_msg {
+  display: inherit;
+  max-width: 100%;
+}
+
+#notSame {
+  color: #dc3545;
 }

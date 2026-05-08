@@ -1,0 +1,125 @@
+<%- include('header.ejs') -%>
+<%- include('navbar.ejs') -%>
+<h1>Réservations</h1>
+<div class="d-flex justify-content-center align-items-center gap-2 mb-3">
+    
+    <form action="/reservations" method="get" class="d-flex align-items-center gap-2">
+        <label for="id">N° de catway</label>
+        <input type="number" name="id" placeholder="1,2,..." min="1" required class="form-control" style="width: 100px;">
+        <button type="submit" class="btn btn-primary">
+            Afficher les réservations
+        </button>
+    </form>
+    
+</div>
+<Div class="row justify-content-center gx-0">
+                                        <!-- List reservation -->
+    <div class="list col-6 p-2">
+        <h2>Catway n° <%= catway_num %></h2>
+        <div class="mt-3 alert alert-danger <%= err_msg ? 'voir' : '' %>" role="alert">
+                <%= err_notFind %>
+        </div>
+        <div class="collapse <%= reservations.length > 0 ? 'show' : '' %>" id="collapseList">
+            <table class="shadow table text-center align-middle">
+                <thead>
+                    <tr>
+                        <th colspan="2">Information</th>
+                        <th>Durée de réservation</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <% reservations.forEach(reservation => { %>
+                    <tbody class="table-hover-group">
+                        <tr>
+                            <th>N° de reservation</th>
+                            <td><%= reservation._id.toString().slice(0, 5).toUpperCase() %></td>
+                            <td rowspan="3">
+                                <%= new Date(reservation.startDate).toLocaleDateString('fr-FR') %> - 
+                                <%= new Date(reservation.endDate).toLocaleDateString('fr-FR') %>
+                            </td>
+                            <td rowspan="3">
+                                <a href="/catways/<%= catway_num %>/reservation/<%= reservation._id %>" class="btn btn-primary">Modifier</a>
+
+                                <!-- Modal confirmation -->
+                                <button type="button" class="btn btn-outline-danger mt-3 d-block" data-bs-toggle="modal" data-bs-target="#deleteConfirmation-<%= reservation._id %>">Supprimer</button>
+                                <div class="modal fade" id="deleteConfirmation-<%= reservation._id %>" tabindex="-1" >
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" >Confirmation</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Etes-vous sure de vouloir supprimer cette réservation ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                                                <button type="submit" class="btn btn-outline-danger" onclick="deleteOne(`/catways/<%= catway_num %> /reservations/<%= reservation._id %>`)">Supprimer</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Fin Modal confirmation -->
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Bateau</th>
+                            <td><%= reservation.boatName %></td>
+                            
+                        </tr>
+                        <tr>
+                            <th>Client</th>
+                            <td><%= reservation.clientName %></td>
+                        </tr>
+                    </tbody>
+                <% }) %>
+            </table>
+        </div>
+    </div>
+    <div class="vr"></div>
+                                        <!-- Create reservation -->
+    <div class="create d-flex align-items-center justify-content-center col-6">
+        <span id="create_btn" class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-title="Afficher les réservations avant de créer">
+            <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#collapseCreate" <%= !catway_num ? 'disabled ' : '' %>>
+                Créer une réservation
+            </button>
+        </span>
+        <div class="collapse" id="collapseCreate">
+            <h3 class="text-center">Créer votre réservation</h3>
+            <form id="form_create" class="shadow form-group mt-3" action="/catways/<%= catway_num %>/reservations" method="post">
+                <fieldset>
+                    <div class="form-floating mb-3">
+                        <input type="number" name="catwayNumber" class="form-control" min="1" placeholder="" value="<%= catway_num %>">
+                        <label for="catwayNumber">N° de catway</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input id="clientName" type="text" name="clientName" class="form-control" placeholder="" required>
+                        <label for="clientName">Nom du client</label>
+                        <small id="msg_client" class="invalid-feedback" hidden>Min 3 caractères</small>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input id="boatName" type="text" name="boatName" class="form-control" placeholder="" required>
+                        <label for="boatName">Nom du bateau</label>
+                        <small id="msg_boat" class="invalid-feedback" hidden>Min 3 caractères</small>
+                    </div>
+                    <div class="input-date mb-3">
+                        <label for="startDate">Début de réservation</label>
+                        <input id="startDate" type="date" min="<%= dateMin %>" name="startDate" class="form-control" required>
+                    </div>
+                    <div class="input-date mb-3">
+                        <label for="endDate">Fin de réservation</label>
+                        <input id="endDate" type="date" name="endDate" min="<%= dateMin %>" class="form-control" required>
+                    </div>   
+                </fieldset>
+                <button type="submit" class="btn btn-primary mt-3 float-end" >Créer la réservation</button>
+            </form>
+        </div>
+        <div id="succ_msg" class="mt-3 alert alert-success position-absolute bottom-50 <%= locals.succ_msg ? 'd-block' : 'd-none' %>" role="alert">
+            Votre réservation a été Créée
+        </div>
+        <div id="err_msg" class="mt-3 alert alert-danger <%= locals.err_create ? 'd-block' : 'd-none' %>" role="alert">
+            Une erreur s'est produite lors de la création de votre réservation
+        </div>
+    </div>
+</Div>
+<%- include('footer.ejs') -%>

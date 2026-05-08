@@ -41,7 +41,7 @@ Assure-toi d'avoir installé sur ta machine :
 
 1. **Clone le dépôt**
    ```bash
-   git clone https://github.com/Anderson972/Devoir-portfolio-luce-anderson
+   git clone https://github.com/Anderson972/
    cd API_port_russell
    ```
 

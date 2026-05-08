@@ -47,7 +47,6 @@ const private = require('../middlewares/private')
  */
 router.get('/', private.checkJWT, service.getAll);
 
-
 /**
  * @swagger
  * /users/{email}:
@@ -97,7 +96,6 @@ router.get('/', private.checkJWT, service.getAll);
  *         description: Erreur serveur
  */
 router.get('/:email', private.checkJWT, service.getByMail);
-
 
 /**
  * @swagger
@@ -150,7 +148,6 @@ router.get('/:email', private.checkJWT, service.getByMail);
  *         description: Erreur serveur
  */
 router.post('/', service.add);
-
 
 /**
  * @swagger
@@ -219,7 +216,6 @@ router.post('/', service.add);
  */
 router.put('/:email', private.checkJWT, service.updates);
 
-
 /**
  * @swagger
  * /users/{email}:
@@ -262,6 +258,5 @@ router.put('/:email', private.checkJWT, service.updates);
  *         description: Erreur serveur
  */
 router.delete('/:email', private.checkJWT, service.delete);
-
 
 module.exports = router;

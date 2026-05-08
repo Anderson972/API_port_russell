@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (form_log){
         form_log.addEventListener('input', (e) => {
             e.target.classList.remove('is-invalid')
-            console.log(e.target)
         });
     }
 });
@@ -85,7 +84,7 @@ async function updateOne(path) {
 };
 // initialisation des tooltips bootstrap
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el))
+tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el))
 
 //create success 
 document.addEventListener('DOMContentLoaded', () => {
@@ -232,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         form.addEventListener('submit', (e) => {
             if (password.value !== passwordConfirmed.value) {
-                e.preventDefault()  //pas d'envoi
+                e.preventDefault() 
                 passwordConfirmed.classList.add('is-invalid')
             }
         })

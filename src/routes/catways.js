@@ -227,7 +227,6 @@ router.post('/catways', private.checkJWT, service.add)
  */
 router.put('/catways/:id', private.checkJWT, service.updates)
 
-
 /**
  * @swagger
  * /catways/{id}:

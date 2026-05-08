@@ -1,7 +1,6 @@
 <%- include('header.ejs') -%>
 <%- include('navbar.ejs') -%>
 <h1>Tableau de bord</h1>
-
 <div class="date card">
     <time class="text-center" datetime="YYYY-MM-DD"><%= date_now %></time>
 </div>
@@ -11,7 +10,7 @@
 </div>
 <div class="reservations container-sm mx-auto mb-4">
     <h2 class="text-center">Réservations en cours</h2>
-    <table class="table table-hover text-center">
+    <table class="shadow table table-hover text-center">
         <% reservations.forEach(reservation => { %>
         <tr>
             <td><%= reservation.boatName %></td>
@@ -21,7 +20,6 @@
     </table>
     
      <a href="/reservations" class="btn btn-primary">Voir les réservations</a>
-    
 </div>
 <%- include('footer.ejs') -%>
 

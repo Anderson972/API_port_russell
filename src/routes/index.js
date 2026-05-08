@@ -16,7 +16,7 @@ const reservation = require('../models/reservation');
 
 
 
-// login 
+// page login 
 router.get('/', (req, res) => {
   res.render('index', {
     title: 'Accueil - se connecter',
@@ -27,7 +27,6 @@ router.get('/', (req, res) => {
 });
 
 //Gestion de la connexion
-
 /**
  * @swagger
  * /login:
@@ -142,8 +141,7 @@ router.get('/dashboard', private.checkJWT, async (req, res) => {
   }
   
 });
-// début Crud Réservation
-
+//                    début Crud Réservation
 //reservation
 router.get('/reservations', private.checkJWT, async (req, res) => {
   const id = parseInt(req.query.id)
@@ -213,7 +211,6 @@ router.delete('/catways/:id/reservation/:idReservation', private.checkJWT, async
     if (catway) {
       const reservation = await Reservation.findById(idReservation)
       if (reservation) {
-        console.log('N° _id' + idReservation)
         await Reservation.deleteOne({_id : idReservation})
         return res.redirect(`/catways/${id}/reservations`)
       }
@@ -375,9 +372,9 @@ router.post('/catways/:id/reservations', private.checkJWT, async (req, res) => {
     return res.status(500).json({message : 'erreur serveur add'})
   }
 })
-// Fin Crud Féservation
+//                    Fin Crud Réservation
 
-// début Crud Catways
+//                    Début Crud Catways
 // ALL catways
 router.get('/catways', private.checkJWT, async (req, res) => {
   const success = req.query.success === 'true'
@@ -411,7 +408,6 @@ router.get('/catways', private.checkJWT, async (req, res) => {
     return res.status(500).json({message : 'erreur serveur catways'})
   }
 });
-
 // create catway
 router.post('/catways', private.checkJWT, async (req, res) => {
   const temp = ({
@@ -430,7 +426,6 @@ router.post('/catways', private.checkJWT, async (req, res) => {
     return res.status(500).json({message : 'erreur serveur create catways'})
   }
 });
-
 // Get ONE catway
 router.get('/catways/:id', private.checkJWT, async (req, res) => {
   const id = parseInt(req.params.id)
@@ -458,7 +453,6 @@ router.get('/catways/:id', private.checkJWT, async (req, res) => {
     return res.status(500).json({message : 'erreur serveur  onecatways'})
   }
 });
-
 // Update catway
 router.put('/catways/:id', private.checkJWT, async (req, res) => {
 
@@ -493,7 +487,6 @@ router.put('/catways/:id', private.checkJWT, async (req, res) => {
     return res.status(500).json({message : 'erreur serveur  update catways'})
   }
 });
-
 //Delete catway
 router.delete('/catways/:id', private.checkJWT, async (req, res) => {
   const id = parseInt(req.params.id)
@@ -505,9 +498,9 @@ router.delete('/catways/:id', private.checkJWT, async (req, res) => {
     return res.status(500).json({message : 'erreur serveur  delete catways'})
   }
 });
-//Fin CRUD catway
+//                    Fin CRUD catway
 
-//Début CRUD users
+//                    Début CRUD Users
 //All users
 router.get('/users', private.checkJWT, async (req, res) => {
   
@@ -540,7 +533,6 @@ router.get('/users', private.checkJWT, async (req, res) => {
     return res.status(500).json({message : 'erreur serveur users'})
   }
 });
-
 // create user
 router.post('/users', private.checkJWT, async (req, res) => {
   const temp = ({
@@ -556,7 +548,6 @@ router.post('/users', private.checkJWT, async (req, res) => {
     return res.status(500).json({message : 'erreur serveur create user'})
   }
 });
-
 //get one user
 router.get('/users/:email', private.checkJWT, async (req, res) => {
   const email = req.params.email
@@ -580,10 +571,9 @@ router.get('/users/:email', private.checkJWT, async (req, res) => {
       })
   } catch (error) {
     console.error(error)
-    return res.status(500).json({message : 'erreur serveur  oneuser'})
+    return res.status(500).json({message : 'erreur serveur  oneUser'})
   }
 });
-
 // update user
 router.put('/users/:email', private.checkJWT, async (req, res) => {
 
@@ -623,7 +613,6 @@ router.put('/users/:email', private.checkJWT, async (req, res) => {
     return res.status(500).json({message : 'erreur serveur  update catways'})
   }
 });
-
 // delete user
 router.delete('/users/:email', private.checkJWT, async (req, res) => {
   const email = req.params.email
@@ -635,4 +624,5 @@ router.delete('/users/:email', private.checkJWT, async (req, res) => {
     return res.status(500).json({message : 'erreur serveur delete users'})
   }
 });
+//                    Fin CRUD Users
 module.exports = router;

@@ -19,7 +19,6 @@ exports.add = async (req, res, next) => {
 //récupere la liste des catways
 exports.getAll = async (req, res, next) => {
     
-
     try {
         if (req.accepts('html')) {
             return next()
@@ -63,7 +62,6 @@ exports.updates = async (req, res, next) => {
             if(catwayState){
                 catway.catwayState = catwayState
             }
-
             await catway.save()
             return res.status(200).json(catway)
         }

@@ -66,7 +66,6 @@ const private = require('../middlewares/private')
  */
 router.get('/:id/reservations', private.checkJWT, service.getAll)
 
-
 /**
  * @swagger
  * /catways/{id}/reservations/{id}:
@@ -132,7 +131,6 @@ router.get('/:id/reservations', private.checkJWT, service.getAll)
  *         description: Erreur serveur
  */
 router.get('/:id/reservations/:idReservation', private.checkJWT, service.getById)
-
 
 /**
  * @swagger
@@ -222,7 +220,6 @@ router.get('/:id/reservations/:idReservation', private.checkJWT, service.getById
  *         description: Erreur serveur
  */
 router.post('/:id/reservations', private.checkJWT, service.add)
-
 
 /**
  * @swagger
@@ -314,7 +311,6 @@ router.post('/:id/reservations', private.checkJWT, service.add)
  */
 router.put('/:id/reservations/:idReservation', private.checkJWT, service.updates)
 
-
 /**
  * @swagger
  * /catways/{id}/reservations/{idReservation}:
@@ -363,8 +359,5 @@ router.put('/:id/reservations/:idReservation', private.checkJWT, service.updates
  *         description: Erreur serveur
  */
 router.delete('/:id/reservations/:idReservation', private.checkJWT, service.delete)
-
-
-
 
 module.exports = router

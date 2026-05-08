@@ -71,19 +71,11 @@ app.use(session({
     }
 }));
 
-/* const swaggerDocs = swaggerJsDoc(swaggerOptions)
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs)) */
+const swaggerDocs = swaggerJsDoc(swaggerOptions)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
-
-try {
-    const swaggerDocs = swaggerJsDoc(swaggerOptions)
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
-} catch (error) {
-    console.error('Erreur Swagger :', error.message)
-}
 
 app.use('/', (req, res, next) => {
-    console.log(`${req.method} ${req.url}`)
     next()
 })
 
